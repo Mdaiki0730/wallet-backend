@@ -1,3 +1,5 @@
 package dto
 
-type Wallet struct{}
+type Wallet struct{
+	BlockchainAddress string `json:"blockchain_address"`
+}

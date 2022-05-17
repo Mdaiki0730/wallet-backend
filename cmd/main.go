@@ -6,15 +6,24 @@ import (
   "context"
 
   "gariwallet/internal/application/usecase"
-  "gariwallet/internal/application/command"
+  "gariwallet/internal/infrastructure"
+  "gariwallet/pkg/database"
 )
+
+func init() {
+  log.SetPrefix("Wallet Server: ")
+}
 
 func main() {
   ctx, cancel := context.WithCancel(context.Background())
   defer cancel()
-  fmt.Println("hello")
-  wa := usecase.NewWalletApp()
-  result, err := wa.Create(ctx, command.WalletCreate{})
+
+  mongoClient := database.ConnectMongoDB(ctx)
+  defer database.DisconnectDB(ctx, mongoClient)
+
+  wr := infrastructure.NewWalletRepository(mongoClient)
+  wa := usecase.NewWalletApp(wr)
+  result, err := wa.Create(ctx)
   if err != nil {
     log.Fatal("can't create")
   }

@@ -1,1 +1,5 @@
+# env file
 .env
+
+# tmp directory
+tmp

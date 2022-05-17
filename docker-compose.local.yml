@@ -1,0 +1,26 @@
+version: "3"
+
+services:
+  wallet:
+    container_name: wallet-backend
+    build:
+      context: .
+      dockerfile: Dockerfile.local
+    command: "air -c /app/go/base/cmd/.air.toml"
+    env_file:
+      - .env
+    image: wallet
+    volumes:
+      - .:/app/go/base:rw
+    tty: true
+    ports:
+      - ${REST_PORT}:${REST_PORT}
+      - ${GRPC_PORT}:${GRPC_PORT}
+  mongo:
+    container_name: wallet-mongo
+    image: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_DB_ROOT_USER_NAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_DB_ROOT_USER_PASSWORD}
+    ports:
+      - ${MONGO_DB_PORT}:${MONGO_DB_PORT}

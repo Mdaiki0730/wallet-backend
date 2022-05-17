@@ -2,7 +2,7 @@
 Provide a blockchain wallet. \
 Supports wallet creation and requests to blockchain servers.
 
-### version
+## Version
 - Docker:20.10.12
 - golang:1.18
 

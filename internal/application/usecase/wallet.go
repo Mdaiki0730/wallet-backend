@@ -1,35 +1,35 @@
 package usecase
 
 import (
-  "context"
+	"context"
 
-  "gariwallet/internal/application/dto"
-  "gariwallet/internal/domain/model"
-  "gariwallet/internal/domain/repoif"
+	"gariwallet/internal/application/result"
+	"gariwallet/internal/domain/model"
+	"gariwallet/internal/domain/repoif"
 )
 
 type WalletAppIF interface {
-  Create(ctx context.Context) (*dto.Wallet, error)
+	Create(ctx context.Context) (*result.Wallet, error)
 }
 
 type walletApp struct {
-  repository repoif.Wallet
+	repository repoif.Wallet
 }
 
 func NewWalletApp(r repoif.Wallet) WalletAppIF {
-  return &walletApp{r}
+	return &walletApp{r}
 }
 
-func (wa *walletApp) Create(ctx context.Context) (*dto.Wallet, error) {
-  // create wallet instance
-  wallet := model.NewWallet()
+func (wa *walletApp) Create(ctx context.Context) (*result.Wallet, error) {
+	// create wallet instance
+	wallet := model.NewWallet()
 
-  // insert database
-  if err := wa.repository.InsertOne(ctx, wallet); err != nil {
-    return nil, err
-  }
+	// insert database
+	if err := wa.repository.InsertOne(ctx, wallet); err != nil {
+		return nil, err
+	}
 
-  // data transfer dto
-  result := dto.Wallet{wallet.BlockchainAddress()}
-  return &result, nil
+	// data transfer dto
+	result := result.Wallet{wallet.BlockchainAddress()}
+	return &result, nil
 }

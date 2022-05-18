@@ -1,0 +1,11 @@
+syntax = "proto2";
+
+package proto;
+
+option go_package = "./;walletpb";
+
+message CreateWalletRequest {}
+
+message WalletBaseResponse {
+  required string blockchain_address    = 1;
+}

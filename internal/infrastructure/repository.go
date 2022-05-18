@@ -1,15 +1,15 @@
 package infrastructure
 
 import (
-  "context"
+	"context"
 
-  "go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 func insertOne(ctx context.Context, collection *mongo.Collection, obj interface{}) error {
-  _, err := collection.InsertOne(ctx, obj)
-  if err != nil {
-    return err
-  }
-  return nil
+	_, err := collection.InsertOne(ctx, obj)
+	if err != nil {
+		return err
+	}
+	return nil
 }

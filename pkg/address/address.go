@@ -1,10 +1,10 @@
 package address
 
 import (
-  "crypto/sha256"
+	"crypto/sha256"
 
-  "github.com/btcsuite/btcutil/base58"
-  "golang.org/x/crypto/ripemd160"
+	"github.com/btcsuite/btcutil/base58"
+	"golang.org/x/crypto/ripemd160"
 )
 
 /*
@@ -13,7 +13,7 @@ import (
 */
 
 func New(pubx, prix []byte) string {
-  // 1. hash by sha256
+	// 1. hash by sha256
 	h1 := sha256.New()
 	h1.Write(pubx)
 	h1.Write(prix)
@@ -49,5 +49,5 @@ func New(pubx, prix []byte) string {
 
 	// 8. Convert the result from a byte string into base58
 	address := base58.Encode(dc7)
-  return address
+	return address
 }

@@ -17,3 +17,7 @@ docker-build:
 .PHONY: watch-log
 watch-log:
 	@docker-compose -f docker-compose.local.yml logs -f wallet
+
+.PHONY: gen-proto
+gen-proto:
+	@sh ./script/generate-proto.sh

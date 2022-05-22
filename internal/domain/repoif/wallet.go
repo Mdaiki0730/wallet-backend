@@ -1,11 +1,11 @@
 package repoif
 
 import (
-  "context"
+	"context"
 
-  "gariwallet/internal/domain/model"
+	"gariwallet/internal/domain/model"
 )
 
 type Wallet interface {
-  InsertOne(ctx context.Context, wallet *model.Wallet) error
+	InsertOne(ctx context.Context, wallet *model.Wallet) error
 }

@@ -4,12 +4,14 @@ import (
 	"context"
 	"log"
 
+	"gariwallet/pkg/config"
+
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 func ConnectMongoDB(ctx context.Context) *mongo.Client {
-	clientOptions := options.Client().ApplyURI(""/* enter your mongo uri */)
+	clientOptions := options.Client().ApplyURI(config.Global.MongoDBUri)
 	client, err := mongo.Connect(ctx, clientOptions)
 	if err != nil {
 		log.Fatalf("Cannot connect DB")

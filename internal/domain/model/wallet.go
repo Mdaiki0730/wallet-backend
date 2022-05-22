@@ -1,13 +1,13 @@
 package model
 
 import (
-  "fmt"
-  "crypto/ecdsa"
-  "crypto/elliptic"
-  "crypto/rand"
-  "encoding/json"
+	"crypto/ecdsa"
+	"crypto/elliptic"
+	"crypto/rand"
+	"encoding/json"
+	"fmt"
 
-  "gariwallet/pkg/address"
+	"gariwallet/pkg/address"
 )
 
 type Wallet struct {
@@ -47,13 +47,13 @@ func (w *Wallet) BlockchainAddress() string {
 }
 
 func (w *Wallet) MarshalJSON() ([]byte, error) {
-  return json.Marshal(struct{
-    PrivateKey string `json:"private_key"`
-    PublicKey string `json:"public_key"`
-    BlockchainAddress string `json:"blockchain_address"`
-  }{
-    PrivateKey: w.PrivateKeyStr(),
-    PublicKey: w.PublicKeyStr(),
-    BlockchainAddress: w.BlockchainAddress(),
-  })
+	return json.Marshal(struct {
+		PrivateKey        string `json:"private_key"`
+		PublicKey         string `json:"public_key"`
+		BlockchainAddress string `json:"blockchain_address"`
+	}{
+		PrivateKey:        w.PrivateKeyStr(),
+		PublicKey:         w.PublicKeyStr(),
+		BlockchainAddress: w.BlockchainAddress(),
+	})
 }

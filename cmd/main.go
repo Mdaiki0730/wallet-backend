@@ -11,6 +11,7 @@ import (
 	"gariwallet/internal/application/usecase"
 	"gariwallet/internal/infrastructure"
 	"gariwallet/internal/presentation/server"
+	"gariwallet/pkg/config"
 	"gariwallet/pkg/database"
 
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
@@ -20,6 +21,9 @@ import (
 
 func init() {
 	log.SetPrefix("Wallet Server: ")
+	if err := config.Load(); err != nil {
+    panic(err)
+  }
 }
 
 func main() {
@@ -37,7 +41,7 @@ func main() {
 	walletpb.RegisterWalletManagementServer(grpcServer, walletServer)
 
 	reflection.Register(grpcServer)
-	grpcAddress := fmt.Sprintf(":%s", "8081")
+	grpcAddress := fmt.Sprintf(":%s", config.Global.GrpcPort)
 	grpcListener, err := net.Listen("tcp", grpcAddress)
 	if err != nil {
 		log.Fatal("can't run grpc server")
@@ -57,17 +61,16 @@ func main() {
 }
 
 func RunGateway() error {
-	log.Println("naze")
 	ctx := context.Background()
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 
 	mux := runtime.NewServeMux()
 	opts := []grpc.DialOption{grpc.WithInsecure()}
-	endpoint := fmt.Sprintf("localhost:%s", "8081")
+	endpoint := fmt.Sprintf("localhost:%s", config.Global.GrpcPort)
 	err := walletpb.RegisterWalletManagementHandlerFromEndpoint(ctx, mux, endpoint, opts)
 	if err != nil {
 		return err
 	}
-	return http.ListenAndServe(fmt.Sprintf(":%s", "8080"), mux)
+	return http.ListenAndServe(fmt.Sprintf(":%s", config.Global.RestPort), mux)
 }

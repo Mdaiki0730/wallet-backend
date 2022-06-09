@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"io"
 	"log"
 	"net"
 	"net/http"
@@ -19,8 +20,16 @@ import (
 
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/grpclog"
 	"google.golang.org/grpc/reflection"
+	"google.golang.org/grpc/status"
 )
+
+type ErrorBody struct {
+	Msg  string `json:"msg"`
+	Code int32  `json:"code"`
+}
 
 func init() {
 	log.SetPrefix("Wallet Server: ")
@@ -72,6 +81,7 @@ func RunGateway() error {
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 
+	runtime.HTTPError = CustomHTTPError
 	mux := runtime.NewServeMux()
 	opts := []grpc.DialOption{grpc.WithInsecure()}
 	endpoint := fmt.Sprintf("localhost:%s", config.Global.GrpcPort)
@@ -80,4 +90,37 @@ func RunGateway() error {
 		return err
 	}
 	return http.ListenAndServe(fmt.Sprintf(":%s", config.Global.RestPort), mux)
+}
+
+func CustomHTTPError(ctx context.Context, _ *runtime.ServeMux, marshaler runtime.Marshaler, w http.ResponseWriter, _ *http.Request, err error) {
+	const fallback = `{"error": "failed to marshal error message"}`
+	w.Header().Del("Trailer")
+	w.Header().Set("Content-Type", marshaler.ContentType())
+
+	s, ok := status.FromError(err)
+	if !ok {
+		s = status.New(codes.Unknown, err.Error())
+	}
+
+	body := &ErrorBody{
+		Msg:  s.Message(),
+		Code: int32(s.Code()),
+	}
+
+	buf, merr := marshaler.Marshal(body)
+	if merr != nil {
+		grpclog.Infof("Failed to marshal error message %q: %v", body, merr)
+		w.WriteHeader(http.StatusInternalServerError)
+		if _, err := io.WriteString(w, fallback); err != nil {
+			grpclog.Infof("Failed to write response: %v", err)
+		}
+		return
+	}
+
+	// convert grpc code to http code
+	st := runtime.HTTPStatusFromCode(s.Code())
+	w.WriteHeader(st)
+	if _, err := w.Write(buf); err != nil {
+		grpclog.Infof("Failed to write response: %v", err)
+	}
 }

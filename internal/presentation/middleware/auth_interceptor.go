@@ -30,6 +30,11 @@ func (interceptor *AuthInterceptor) AuthUnary() grpc.UnaryServerInterceptor {
 		info *grpc.UnaryServerInfo,
 		handler grpc.UnaryHandler,
 	) (interface{}, error) {
+		// In case of health check, do not authenticate
+		if info.FullMethod == "/proto.Health/Check" {
+			return handler(ctx, req)
+		}
+
 		ctx, cancel := context.WithCancel(ctx)
 		defer cancel()
 

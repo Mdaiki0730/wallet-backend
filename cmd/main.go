@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"time"
 
+	"gariwallet/api/proto/health/healthpb"
 	"gariwallet/api/proto/wallet/walletpb"
 	"gariwallet/internal/application/usecase"
 	"gariwallet/internal/infrastructure"
@@ -54,7 +55,9 @@ func main() {
 	wr := infrastructure.NewWalletRepository(mongoClient)
 	wa := usecase.NewWalletApp(wr)
 	walletServer := server.NewWalletManagementServer(wa)
+	healthServer := server.NewHealthServer()
 	walletpb.RegisterWalletManagementServer(grpcServer, walletServer)
+	healthpb.RegisterHealthServer(grpcServer, healthServer)
 
 	reflection.Register(grpcServer)
 	grpcAddress := fmt.Sprintf(":%s", config.Global.GrpcPort)
@@ -86,6 +89,10 @@ func RunGateway() error {
 	opts := []grpc.DialOption{grpc.WithInsecure()}
 	endpoint := fmt.Sprintf("localhost:%s", config.Global.GrpcPort)
 	err := walletpb.RegisterWalletManagementHandlerFromEndpoint(ctx, mux, endpoint, opts)
+	if err != nil {
+		return err
+	}
+	err = healthpb.RegisterHealthHandlerFromEndpoint(ctx, mux, endpoint, opts)
 	if err != nil {
 		return err
 	}

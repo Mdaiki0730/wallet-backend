@@ -1,3 +1,5 @@
 package command
 
-type WalletCreate struct{}
+type WalletCreate struct {
+	IdpId string `json:"idp_id"`
+}

@@ -5,6 +5,7 @@ import (
 	"errors"
 
 	"gariwallet/api/proto/wallet/walletpb"
+	"gariwallet/internal/application/command"
 	"gariwallet/internal/application/usecase"
 	// "google.golang.org/grpc/codes"
 	// "google.golang.org/grpc/status"
@@ -20,7 +21,8 @@ func NewWalletManagementServer(app usecase.WalletAppIF) walletpb.WalletManagemen
 }
 
 func (wm *walletManagementServer) Create(ctx context.Context, req *walletpb.CreateWalletRequest) (*walletpb.WalletBaseResponse, error) {
-	result, err := wm.application.Create(ctx)
+	cmd := command.WalletCreate{ctx.Value("idp_id").(string)}
+	result, err := wm.application.Create(ctx, cmd)
 	if err != nil {
 		return nil, err
 	}

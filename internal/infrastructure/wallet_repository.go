@@ -7,6 +7,7 @@ import (
 	"gariwallet/internal/domain/repoif"
 	"gariwallet/internal/infrastructure/dbmodel"
 
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -25,4 +26,12 @@ func (wr *walletRepository) InsertOne(ctx context.Context, wallet *model.Wallet)
 		return err
 	}
 	return nil
+}
+
+func (wr *walletRepository) FindById(ctx context.Context, idpId string) (*model.Wallet, error) {
+	obj, err := findOne[model.Wallet](ctx, wr.collection, bson.D{{"idp_id", idpId}})
+	if err != nil {
+		return nil, err
+	}
+	return obj, nil
 }

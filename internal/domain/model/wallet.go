@@ -11,19 +11,25 @@ import (
 )
 
 type Wallet struct {
+	idpId             string
 	privateKey        *ecdsa.PrivateKey
 	publicKey         *ecdsa.PublicKey
 	blockchainAddress string
 }
 
-func NewWallet() *Wallet {
+func NewWallet(idpId string) *Wallet {
 	w := new(Wallet)
 	privateKey, _ := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
+	w.idpId = idpId
 	w.privateKey = privateKey
 	w.publicKey = &w.privateKey.PublicKey
 	w.blockchainAddress = address.New(w.publicKey.X.Bytes(), w.privateKey.X.Bytes())
 
 	return w
+}
+
+func (w *Wallet) IdpId() string {
+	return w.idpId
 }
 
 func (w *Wallet) PrivateKey() *ecdsa.PrivateKey {
@@ -48,10 +54,12 @@ func (w *Wallet) BlockchainAddress() string {
 
 func (w *Wallet) MarshalJSON() ([]byte, error) {
 	return json.Marshal(struct {
+		IdpId             string `json:"idp_id"`
 		PrivateKey        string `json:"private_key"`
 		PublicKey         string `json:"public_key"`
 		BlockchainAddress string `json:"blockchain_address"`
 	}{
+		IdpId:             w.IdpId(),
 		PrivateKey:        w.PrivateKeyStr(),
 		PublicKey:         w.PublicKeyStr(),
 		BlockchainAddress: w.BlockchainAddress(),

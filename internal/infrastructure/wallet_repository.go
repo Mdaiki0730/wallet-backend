@@ -35,3 +35,11 @@ func (wr *walletRepository) FindById(ctx context.Context, idpId string) (*model.
 	}
 	return obj, nil
 }
+
+func (wr *walletRepository) DeleteById(ctx context.Context, idpId string) error {
+	err := deleteOne(ctx, wr.collection, bson.D{{"idp_id", idpId}})
+	if err != nil {
+		return err
+	}
+	return nil
+}

@@ -2,6 +2,7 @@ package infrastructure
 
 import (
 	"context"
+	"errors"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -22,4 +23,14 @@ func findOne[T any](ctx context.Context, collection *mongo.Collection, searchKey
 		return nil, err
 	}
 	return &obj, nil
+}
+
+func deleteOne(ctx context.Context, collection *mongo.Collection, searchKey bson.D) error {
+	result, err := collection.DeleteOne(ctx, searchKey)
+	if err != nil {
+		return err
+	} else if result.DeletedCount == 0 {
+		return errors.New("no document to delete")
+	}
+	return nil
 }

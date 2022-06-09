@@ -12,6 +12,7 @@ import (
 
 type WalletAppIF interface {
 	Create(ctx context.Context, cmd command.WalletCreate) (*result.Wallet, error)
+	Delete(ctx context.Context, cmd command.WalletDelete) error
 }
 
 type walletApp struct {
@@ -40,4 +41,11 @@ func (wa *walletApp) Create(ctx context.Context, cmd command.WalletCreate) (*res
 	// data transfer dto
 	result := result.Wallet{wallet.BlockchainAddress()}
 	return &result, nil
+}
+
+func (wa *walletApp) Delete(ctx context.Context, cmd command.WalletDelete) error {
+	if err := wa.repository.DeleteById(ctx, cmd.IdpId); err != nil {
+		return err
+	}
+	return nil
 }

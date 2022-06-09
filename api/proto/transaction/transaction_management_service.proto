@@ -1,0 +1,17 @@
+syntax = "proto2";
+
+package proto;
+
+import "google/api/annotations.proto";
+import "transaction_message.proto";
+
+option go_package = "./;transactionpb";
+
+service TransactionManagement {
+  rpc Create(CreateTransactionRequest) returns (TransactionBaseResponse) {
+    option (google.api.http) = {
+      post : "/v1/transactions"
+			body : "*"
+    };
+  };
+}

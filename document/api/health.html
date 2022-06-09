@@ -175,34 +175,15 @@
         
           
           <li>
-            <a href="#wallet_management_service.proto">wallet_management_service.proto</a>
+            <a href="#health_service.proto">health_service.proto</a>
             <ul>
               
               
               
               
                 <li>
-                  <a href="#proto.WalletManagement"><span class="badge">S</span>WalletManagement</a>
+                  <a href="#proto.Health"><span class="badge">S</span>Health</a>
                 </li>
-              
-            </ul>
-          </li>
-        
-          
-          <li>
-            <a href="#wallet_message.proto">wallet_message.proto</a>
-            <ul>
-              
-                <li>
-                  <a href="#proto.CreateWalletRequest"><span class="badge">M</span>CreateWalletRequest</a>
-                </li>
-              
-                <li>
-                  <a href="#proto.WalletBaseResponse"><span class="badge">M</span>WalletBaseResponse</a>
-                </li>
-              
-              
-              
               
             </ul>
           </li>
@@ -214,7 +195,7 @@
     
       
       <div class="file-heading">
-        <h2 id="wallet_management_service.proto">wallet_management_service.proto</h2><a href="#title">Top</a>
+        <h2 id="health_service.proto">health_service.proto</h2><a href="#title">Top</a>
       </div>
       <p></p>
 
@@ -225,7 +206,7 @@
       
 
       
-        <h3 id="proto.WalletManagement">WalletManagement</h3>
+        <h3 id="proto.Health">Health</h3>
         <p></p>
         <table class="enum-table">
           <thead>
@@ -234,23 +215,9 @@
           <tbody>
             
               <tr>
-                <td>Create</td>
-                <td><a href="#proto.CreateWalletRequest">CreateWalletRequest</a></td>
-                <td><a href="#proto.WalletBaseResponse">WalletBaseResponse</a></td>
-                <td><p></p></td>
-              </tr>
-            
-              <tr>
-                <td>Delete</td>
+                <td>Check</td>
                 <td><a href="#google.protobuf.Empty">.google.protobuf.Empty</a></td>
                 <td><a href="#google.protobuf.Empty">.google.protobuf.Empty</a></td>
-                <td><p></p></td>
-              </tr>
-            
-              <tr>
-                <td>Get</td>
-                <td><a href="#google.protobuf.Empty">.google.protobuf.Empty</a></td>
-                <td><a href="#proto.WalletBaseResponse">WalletBaseResponse</a></td>
                 <td><p></p></td>
               </tr>
             
@@ -275,29 +242,9 @@
               
               
               <tr>
-                <td>Create</td>
-                <td>POST</td>
-                <td>/v1/wallets</td>
-                <td>*</td>
-              </tr>
-              
-            
-              
-              
-              <tr>
-                <td>Delete</td>
-                <td>DELETE</td>
-                <td>/v1/wallets</td>
-                <td></td>
-              </tr>
-              
-            
-              
-              
-              <tr>
-                <td>Get</td>
+                <td>Check</td>
                 <td>GET</td>
-                <td>/v1/wallets</td>
+                <td>/health</td>
                 <td></td>
               </tr>
               
@@ -306,51 +253,6 @@
           </table>
           
         
-    
-      
-      <div class="file-heading">
-        <h2 id="wallet_message.proto">wallet_message.proto</h2><a href="#title">Top</a>
-      </div>
-      <p></p>
-
-      
-        <h3 id="proto.CreateWalletRequest">CreateWalletRequest</h3>
-        <p></p>
-
-        
-
-        
-      
-        <h3 id="proto.WalletBaseResponse">WalletBaseResponse</h3>
-        <p></p>
-
-        
-          <table class="field-table">
-            <thead>
-              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
-            </thead>
-            <tbody>
-              
-                <tr>
-                  <td>blockchain_address</td>
-                  <td><a href="#string">string</a></td>
-                  <td>required</td>
-                  <td><p> </p></td>
-                </tr>
-              
-            </tbody>
-          </table>
-
-          
-
-        
-      
-
-      
-
-      
-
-      
     
 
     <h2 id="scalar-value-types">Scalar Value Types</h2>

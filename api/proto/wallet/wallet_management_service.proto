@@ -3,6 +3,7 @@ syntax = "proto2";
 package proto;
 
 import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
 import "wallet_message.proto";
 
 option go_package = "./;walletpb";
@@ -12,6 +13,16 @@ service WalletManagement {
     option (google.api.http) = {
       post : "/v1/wallets"
 			body : "*"
+    };
+  };
+  rpc Delete(google.protobuf.Empty) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete : "/v1/wallets"
+    };
+  };
+  rpc Get(google.protobuf.Empty) returns (WalletBaseResponse) {
+    option (google.api.http) = {
+      get : "/v1/wallets"
     };
   };
 }

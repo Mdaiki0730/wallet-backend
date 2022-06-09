@@ -11,6 +11,7 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
+	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -23,6 +24,8 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type WalletManagementClient interface {
 	Create(ctx context.Context, in *CreateWalletRequest, opts ...grpc.CallOption) (*WalletBaseResponse, error)
+	Delete(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	Get(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*WalletBaseResponse, error)
 }
 
 type walletManagementClient struct {
@@ -42,11 +45,31 @@ func (c *walletManagementClient) Create(ctx context.Context, in *CreateWalletReq
 	return out, nil
 }
 
+func (c *walletManagementClient) Delete(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, "/proto.WalletManagement/Delete", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *walletManagementClient) Get(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*WalletBaseResponse, error) {
+	out := new(WalletBaseResponse)
+	err := c.cc.Invoke(ctx, "/proto.WalletManagement/Get", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // WalletManagementServer is the server API for WalletManagement service.
 // All implementations should embed UnimplementedWalletManagementServer
 // for forward compatibility
 type WalletManagementServer interface {
 	Create(context.Context, *CreateWalletRequest) (*WalletBaseResponse, error)
+	Delete(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
+	Get(context.Context, *emptypb.Empty) (*WalletBaseResponse, error)
 }
 
 // UnimplementedWalletManagementServer should be embedded to have forward compatible implementations.
@@ -55,6 +78,12 @@ type UnimplementedWalletManagementServer struct {
 
 func (UnimplementedWalletManagementServer) Create(context.Context, *CreateWalletRequest) (*WalletBaseResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
+}
+func (UnimplementedWalletManagementServer) Delete(context.Context, *emptypb.Empty) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
+}
+func (UnimplementedWalletManagementServer) Get(context.Context, *emptypb.Empty) (*WalletBaseResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
 }
 
 // UnsafeWalletManagementServer may be embedded to opt out of forward compatibility for this service.
@@ -86,6 +115,42 @@ func _WalletManagement_Create_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _WalletManagement_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(emptypb.Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WalletManagementServer).Delete(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/proto.WalletManagement/Delete",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WalletManagementServer).Delete(ctx, req.(*emptypb.Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _WalletManagement_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(emptypb.Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WalletManagementServer).Get(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/proto.WalletManagement/Get",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WalletManagementServer).Get(ctx, req.(*emptypb.Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // WalletManagement_ServiceDesc is the grpc.ServiceDesc for WalletManagement service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -96,6 +161,14 @@ var WalletManagement_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Create",
 			Handler:    _WalletManagement_Create_Handler,
+		},
+		{
+			MethodName: "Delete",
+			Handler:    _WalletManagement_Delete_Handler,
+		},
+		{
+			MethodName: "Get",
+			Handler:    _WalletManagement_Get_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

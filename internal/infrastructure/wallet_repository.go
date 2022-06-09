@@ -29,11 +29,11 @@ func (wr *walletRepository) InsertOne(ctx context.Context, wallet *model.Wallet)
 }
 
 func (wr *walletRepository) FindById(ctx context.Context, idpId string) (*model.Wallet, error) {
-	obj, err := findOne[model.Wallet](ctx, wr.collection, bson.D{{"idp_id", idpId}})
+	obj, err := findOne[dbmodel.Wallet](ctx, wr.collection, bson.D{{"idp_id", idpId}})
 	if err != nil {
 		return nil, err
 	}
-	return obj, nil
+	return obj.ConvertDomainModel(), nil
 }
 
 func (wr *walletRepository) DeleteById(ctx context.Context, idpId string) error {

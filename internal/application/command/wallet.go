@@ -7,3 +7,7 @@ type WalletCreate struct {
 type WalletDelete struct {
 	IdpId string `json:"idp_id"`
 }
+
+type WalletGet struct {
+	IdpId string `json:"idp_id"`
+}

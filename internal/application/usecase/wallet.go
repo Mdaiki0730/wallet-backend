@@ -13,6 +13,7 @@ import (
 type WalletAppIF interface {
 	Create(ctx context.Context, cmd command.WalletCreate) (*result.Wallet, error)
 	Delete(ctx context.Context, cmd command.WalletDelete) error
+	Get(ctx context.Context, cmd command.WalletGet) (*result.Wallet, error)
 }
 
 type walletApp struct {
@@ -48,4 +49,15 @@ func (wa *walletApp) Delete(ctx context.Context, cmd command.WalletDelete) error
 		return err
 	}
 	return nil
+}
+
+func (wa *walletApp) Get(ctx context.Context, cmd command.WalletGet) (*result.Wallet, error) {
+	obj, err := wa.repository.FindById(ctx, cmd.IdpId)
+	if err != nil {
+		return nil, err
+	}
+
+	// data transfer dto
+	result := result.Wallet{obj.BlockchainAddress()}
+	return &result, nil
 }

@@ -8,6 +8,7 @@ import (
 	"fmt"
 
 	"gariwallet/pkg/address"
+	"gariwallet/pkg/converter"
 )
 
 type Wallet struct {
@@ -64,4 +65,21 @@ func (w *Wallet) MarshalJSON() ([]byte, error) {
 		PublicKey:         w.PublicKeyStr(),
 		BlockchainAddress: w.BlockchainAddress(),
 	})
+}
+
+// setters
+func (w *Wallet) SetIdpId(idpId string) {
+	w.idpId = idpId
+}
+
+func (w *Wallet) SetPrivateKey(privateKey string, publicKey *ecdsa.PublicKey) {
+	w.privateKey = converter.PrivateKeyFromString(privateKey, publicKey)
+}
+
+func (w *Wallet) SetPublicKey(publicKey string) {
+	w.publicKey = converter.PublicKeyFromString(publicKey)
+}
+
+func (w *Wallet) SetBlockchainAddress(blockchainAddress string) {
+	w.blockchainAddress = blockchainAddress
 }

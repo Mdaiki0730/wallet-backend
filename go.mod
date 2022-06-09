@@ -5,6 +5,7 @@ go 1.18
 require (
 	github.com/btcsuite/btcutil v1.0.2 // indirect
 	github.com/go-stack/stack v1.8.0 // indirect
+	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/golang/snappy v0.0.1 // indirect
 	github.com/grpc-ecosystem/grpc-gateway v1.16.0 // indirect

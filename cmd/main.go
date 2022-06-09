@@ -6,13 +6,16 @@ import (
 	"log"
 	"net"
 	"net/http"
+	"time"
 
 	"gariwallet/api/proto/wallet/walletpb"
 	"gariwallet/internal/application/usecase"
 	"gariwallet/internal/infrastructure"
+	"gariwallet/internal/presentation/middleware"
 	"gariwallet/internal/presentation/server"
 	"gariwallet/pkg/config"
 	"gariwallet/pkg/database"
+	"gariwallet/pkg/myjwt"
 
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"google.golang.org/grpc"
@@ -22,8 +25,8 @@ import (
 func init() {
 	log.SetPrefix("Wallet Server: ")
 	if err := config.Load(); err != nil {
-    panic(err)
-  }
+		panic(err)
+	}
 }
 
 func main() {
@@ -33,7 +36,11 @@ func main() {
 	mongoClient := database.ConnectMongoDB(ctx)
 	defer database.DisconnectDB(ctx, mongoClient)
 
-	grpcServer := grpc.NewServer()
+	duration := time.Duration(config.Global.TokenDuration) * time.Minute
+	jwtManager := myjwt.NewJwtManager(config.Global.JWTSignature, duration, duration+3600)
+	authInterceptor := middleware.NewAuthInterceptor(jwtManager)
+
+	grpcServer := grpc.NewServer(grpc.UnaryInterceptor(authInterceptor.AuthUnary()))
 
 	wr := infrastructure.NewWalletRepository(mongoClient)
 	wa := usecase.NewWalletApp(wr)

@@ -40,6 +40,20 @@ func init() {
 }
 
 func main() {
+	go func() {
+		if err := RunGrpc(); err != nil {
+			log.Fatalf("%s\n", err)
+		}
+	}()
+	go func() {
+		if err := RunGateway(); err != nil {
+			log.Fatalf("%s\n", err)
+		}
+	}()
+	select {}
+}
+
+func RunGrpc() error {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
@@ -66,17 +80,7 @@ func main() {
 		log.Fatal("can't run grpc server")
 	}
 
-	go func() {
-		if err := grpcServer.Serve(grpcListener); err != nil {
-			log.Fatalf("%s\n", err)
-		}
-	}()
-	go func() {
-		if err := RunGateway(); err != nil {
-			log.Fatalf("%s\n", err)
-		}
-	}()
-	select {}
+	return grpcServer.Serve(grpcListener)
 }
 
 func RunGateway() error {

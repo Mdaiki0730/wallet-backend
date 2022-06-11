@@ -10,11 +10,11 @@ import (
 	"time"
 
 	"gariwallet/api/proto/health/healthpb"
-	"gariwallet/api/proto/wallet/walletpb"
 	"gariwallet/api/proto/transaction/transactionpb"
+	"gariwallet/api/proto/wallet/walletpb"
 	"gariwallet/internal/application/usecase"
-	"gariwallet/internal/infrastructure"
 	"gariwallet/internal/externalapp"
+	"gariwallet/internal/infrastructure"
 	"gariwallet/internal/presentation/middleware"
 	"gariwallet/internal/presentation/server"
 	"gariwallet/pkg/config"

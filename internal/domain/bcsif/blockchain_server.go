@@ -8,5 +8,5 @@ import (
 
 type BlockchainServer interface {
 	CreateTransaction(ctx context.Context, transaction model.Transaction) error
-  Amount(ctx context.Context, blockchainAddress string) error
+	Amount(ctx context.Context, blockchainAddress string) error
 }

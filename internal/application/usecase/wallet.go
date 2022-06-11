@@ -57,6 +57,8 @@ func (wa *walletApp) Get(ctx context.Context, cmd command.WalletGet) (*result.Wa
 		return nil, err
 	}
 
+	// get amount
+
 	// data transfer dto
 	result := result.Wallet{obj.BlockchainAddress()}
 	return &result, nil

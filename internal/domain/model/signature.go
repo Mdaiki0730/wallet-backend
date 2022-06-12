@@ -1,8 +1,8 @@
 package model
 
 import (
-  "fmt"
-  "math/big"
+	"fmt"
+	"math/big"
 )
 
 type Signature struct {

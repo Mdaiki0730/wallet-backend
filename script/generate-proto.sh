@@ -13,8 +13,6 @@ for service in ${SERVICES}; do
     --proto_path=${PROTOBUF_PATH}/${service} ${PROTOBUF_PATH}/${service}/*.proto \
     --go-grpc_out=require_unimplemented_servers=false:${PROTOBUF_PATH}/${service}/${service}pb \
     --go_out=${PROTOBUF_PATH}/${service}/${service}pb \
-    --grpc-gateway_out=${PROTOBUF_PATH}/${service}/${service}pb \
-    --doc_out=./document/api \
-    --doc_opt=html,${service}.html;
+    --grpc-gateway_out=${PROTOBUF_PATH}/${service}/${service}pb;
   fi
 done

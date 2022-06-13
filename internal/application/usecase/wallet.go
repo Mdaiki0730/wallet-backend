@@ -6,6 +6,7 @@ import (
 
 	"gariwallet/internal/application/command"
 	"gariwallet/internal/application/result"
+	"gariwallet/internal/domain/bcsif"
 	"gariwallet/internal/domain/model"
 	"gariwallet/internal/domain/repoif"
 )
@@ -13,15 +14,16 @@ import (
 type WalletAppIF interface {
 	Create(ctx context.Context, cmd command.WalletCreate) (*result.Wallet, error)
 	Delete(ctx context.Context, cmd command.WalletDelete) error
-	Get(ctx context.Context, cmd command.WalletGet) (*result.Wallet, error)
+	Get(ctx context.Context, cmd command.WalletGet) (*result.Wallet, float64, error)
 }
 
 type walletApp struct {
-	repository repoif.Wallet
+	repository       repoif.Wallet
+	blockchainServer bcsif.BlockchainServer
 }
 
-func NewWalletApp(r repoif.Wallet) WalletAppIF {
-	return &walletApp{r}
+func NewWalletApp(r repoif.Wallet, bcs bcsif.BlockchainServer) WalletAppIF {
+	return &walletApp{r, bcs}
 }
 
 func (wa *walletApp) Create(ctx context.Context, cmd command.WalletCreate) (*result.Wallet, error) {
@@ -51,15 +53,19 @@ func (wa *walletApp) Delete(ctx context.Context, cmd command.WalletDelete) error
 	return nil
 }
 
-func (wa *walletApp) Get(ctx context.Context, cmd command.WalletGet) (*result.Wallet, error) {
-	obj, err := wa.repository.FindById(ctx, cmd.IdpId)
+func (wa *walletApp) Get(ctx context.Context, cmd command.WalletGet) (*result.Wallet, float64, error) {
+	wallet, err := wa.repository.FindById(ctx, cmd.IdpId)
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
 
 	// get amount
+	value, err := wa.blockchainServer.Amount(ctx, cmd.AccessToken, wallet.BlockchainAddress())
+	if err != nil {
+		return nil, 0, err
+	}
 
 	// data transfer dto
-	result := result.Wallet{obj.BlockchainAddress()}
-	return &result, nil
+	result := result.Wallet{wallet.BlockchainAddress()}
+	return &result, value, nil
 }

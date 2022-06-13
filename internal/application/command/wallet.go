@@ -9,5 +9,6 @@ type WalletDelete struct {
 }
 
 type WalletGet struct {
-	IdpId string `json:"idp_id"`
+	IdpId       string `json:"idp_id"`
+	AccessToken string `json:"access_token"`
 }

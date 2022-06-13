@@ -71,7 +71,7 @@ func RunGrpc() error {
 	wr := infrastructure.NewWalletRepository(mongoClient)
 	bcs := externalapp.NewBlockchainServer()
 
-	wa := usecase.NewWalletApp(wr)
+	wa := usecase.NewWalletApp(wr, bcs)
 	ta := usecase.NewTransactionApp(wr, bcs)
 	walletServer := server.NewWalletManagementServer(wa)
 	transactionServer := server.NewTransactionManagementServer(ta)

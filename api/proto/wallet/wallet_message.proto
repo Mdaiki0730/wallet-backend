@@ -9,3 +9,8 @@ message CreateWalletRequest {}
 message WalletBaseResponse {
   required string blockchain_address    = 1;
 }
+
+message WalletGetResponse {
+  required string blockchain_address    = 1;
+  required double value                 = 2;
+}

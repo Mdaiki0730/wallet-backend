@@ -6,6 +6,8 @@ import (
 	"gariwallet/api/proto/wallet/walletpb"
 	"gariwallet/internal/application/command"
 	"gariwallet/internal/application/usecase"
+	"gariwallet/pkg/md"
+
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/emptypb"
@@ -38,11 +40,12 @@ func (wm *walletManagementServer) Delete(ctx context.Context, req *emptypb.Empty
 	return &emptypb.Empty{}, nil
 }
 
-func (wm *walletManagementServer) Get(ctx context.Context, req *emptypb.Empty) (*walletpb.WalletBaseResponse, error) {
-	cmd := command.WalletGet{ctx.Value("idp_id").(string)}
-	result, err := wm.application.Get(ctx, cmd)
+func (wm *walletManagementServer) Get(ctx context.Context, req *emptypb.Empty) (*walletpb.WalletGetResponse, error) {
+	accessToken := md.GetTokenFromContext(ctx)
+	cmd := command.WalletGet{ctx.Value("idp_id").(string), accessToken}
+	result, value, err := wm.application.Get(ctx, cmd)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
 	}
-	return &walletpb.WalletBaseResponse{BlockchainAddress: &result.BlockchainAddress}, nil
+	return &walletpb.WalletGetResponse{BlockchainAddress: &result.BlockchainAddress, Value: &value}, nil
 }

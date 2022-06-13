@@ -39,7 +39,7 @@ func (bcs *blockchainServer) CreateTransaction(ctx context.Context, token, sende
 		"Authorization": fmt.Sprintf("Bearer %s", token),
 	}
 	endpoint := fmt.Sprintf("%s/v1/transactions", config.Global.BlockchainServerDomain)
-	status, _, err := rest.Request("POST", endpoint, headers, bytes.NewBuffer(reqBody))
+	status, _, err := rest.Request("POST", endpoint, headers, nil, bytes.NewBuffer(reqBody))
 	if err != nil {
 		return err
 	}
@@ -49,6 +49,28 @@ func (bcs *blockchainServer) CreateTransaction(ctx context.Context, token, sende
 	return nil
 }
 
-func (bcs *blockchainServer) Amount(ctx context.Context, blockchainAddress string) (float64, error) {
-	return 0, nil
+type RespAmount struct {
+	Amount float64 `json:"amount"`
+}
+
+func (bcs *blockchainServer) Amount(ctx context.Context, token, blockchainAddress string) (float64, error) {
+	headers := map[string]string{
+		"Content-Type":  "application/json",
+		"Authorization": fmt.Sprintf("Bearer %s", token),
+	}
+	queries := map[string]string{
+		"blockchain_address": blockchainAddress,
+	}
+	endpoint := fmt.Sprintf("%s/v1/amount", config.Global.BlockchainServerDomain)
+	status, body, err := rest.Request("GET", endpoint, headers, queries, nil)
+	if err != nil {
+		return 0, err
+	}
+	if status != 200 {
+		return 0, errors.New("failed creating transaction")
+	}
+
+	amountBody := &RespAmount{}
+	json.Unmarshal(body, amountBody)
+	return amountBody.Amount, nil
 }

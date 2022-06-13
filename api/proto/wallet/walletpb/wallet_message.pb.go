@@ -105,6 +105,61 @@ func (x *WalletBaseResponse) GetBlockchainAddress() string {
 	return ""
 }
 
+type WalletGetResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	BlockchainAddress *string  `protobuf:"bytes,1,req,name=blockchain_address,json=blockchainAddress" json:"blockchain_address,omitempty"`
+	Value             *float64 `protobuf:"fixed64,2,req,name=value" json:"value,omitempty"`
+}
+
+func (x *WalletGetResponse) Reset() {
+	*x = WalletGetResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_wallet_message_proto_msgTypes[2]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *WalletGetResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*WalletGetResponse) ProtoMessage() {}
+
+func (x *WalletGetResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_wallet_message_proto_msgTypes[2]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use WalletGetResponse.ProtoReflect.Descriptor instead.
+func (*WalletGetResponse) Descriptor() ([]byte, []int) {
+	return file_wallet_message_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *WalletGetResponse) GetBlockchainAddress() string {
+	if x != nil && x.BlockchainAddress != nil {
+		return *x.BlockchainAddress
+	}
+	return ""
+}
+
+func (x *WalletGetResponse) GetValue() float64 {
+	if x != nil && x.Value != nil {
+		return *x.Value
+	}
+	return 0
+}
+
 var File_wallet_message_proto protoreflect.FileDescriptor
 
 var file_wallet_message_proto_rawDesc = []byte{
@@ -115,8 +170,14 @@ var file_wallet_message_proto_rawDesc = []byte{
 	0x73, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x2d, 0x0a, 0x12, 0x62, 0x6c,
 	0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x5f, 0x61, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73,
 	0x18, 0x01, 0x20, 0x02, 0x28, 0x09, 0x52, 0x11, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61,
-	0x69, 0x6e, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x42, 0x0d, 0x5a, 0x0b, 0x2e, 0x2f, 0x3b,
-	0x77, 0x61, 0x6c, 0x6c, 0x65, 0x74, 0x70, 0x62,
+	0x69, 0x6e, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x22, 0x58, 0x0a, 0x11, 0x57, 0x61, 0x6c,
+	0x6c, 0x65, 0x74, 0x47, 0x65, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x2d,
+	0x0a, 0x12, 0x62, 0x6c, 0x6f, 0x63, 0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x5f, 0x61, 0x64, 0x64,
+	0x72, 0x65, 0x73, 0x73, 0x18, 0x01, 0x20, 0x02, 0x28, 0x09, 0x52, 0x11, 0x62, 0x6c, 0x6f, 0x63,
+	0x6b, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x41, 0x64, 0x64, 0x72, 0x65, 0x73, 0x73, 0x12, 0x14, 0x0a,
+	0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x18, 0x02, 0x20, 0x02, 0x28, 0x01, 0x52, 0x05, 0x76, 0x61,
+	0x6c, 0x75, 0x65, 0x42, 0x0d, 0x5a, 0x0b, 0x2e, 0x2f, 0x3b, 0x77, 0x61, 0x6c, 0x6c, 0x65, 0x74,
+	0x70, 0x62,
 }
 
 var (
@@ -131,10 +192,11 @@ func file_wallet_message_proto_rawDescGZIP() []byte {
 	return file_wallet_message_proto_rawDescData
 }
 
-var file_wallet_message_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_wallet_message_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
 var file_wallet_message_proto_goTypes = []interface{}{
 	(*CreateWalletRequest)(nil), // 0: proto.CreateWalletRequest
 	(*WalletBaseResponse)(nil),  // 1: proto.WalletBaseResponse
+	(*WalletGetResponse)(nil),   // 2: proto.WalletGetResponse
 }
 var file_wallet_message_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for method output_type
@@ -174,6 +236,18 @@ func file_wallet_message_proto_init() {
 				return nil
 			}
 		}
+		file_wallet_message_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*WalletGetResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -181,7 +255,7 @@ func file_wallet_message_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_wallet_message_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   3,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

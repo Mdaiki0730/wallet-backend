@@ -25,7 +25,7 @@ const _ = grpc.SupportPackageIsVersion7
 type WalletManagementClient interface {
 	Create(ctx context.Context, in *CreateWalletRequest, opts ...grpc.CallOption) (*WalletBaseResponse, error)
 	Delete(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error)
-	Get(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*WalletBaseResponse, error)
+	Get(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*WalletGetResponse, error)
 }
 
 type walletManagementClient struct {
@@ -54,8 +54,8 @@ func (c *walletManagementClient) Delete(ctx context.Context, in *emptypb.Empty, 
 	return out, nil
 }
 
-func (c *walletManagementClient) Get(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*WalletBaseResponse, error) {
-	out := new(WalletBaseResponse)
+func (c *walletManagementClient) Get(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*WalletGetResponse, error) {
+	out := new(WalletGetResponse)
 	err := c.cc.Invoke(ctx, "/proto.WalletManagement/Get", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -69,7 +69,7 @@ func (c *walletManagementClient) Get(ctx context.Context, in *emptypb.Empty, opt
 type WalletManagementServer interface {
 	Create(context.Context, *CreateWalletRequest) (*WalletBaseResponse, error)
 	Delete(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
-	Get(context.Context, *emptypb.Empty) (*WalletBaseResponse, error)
+	Get(context.Context, *emptypb.Empty) (*WalletGetResponse, error)
 }
 
 // UnimplementedWalletManagementServer should be embedded to have forward compatible implementations.
@@ -82,7 +82,7 @@ func (UnimplementedWalletManagementServer) Create(context.Context, *CreateWallet
 func (UnimplementedWalletManagementServer) Delete(context.Context, *emptypb.Empty) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
 }
-func (UnimplementedWalletManagementServer) Get(context.Context, *emptypb.Empty) (*WalletBaseResponse, error) {
+func (UnimplementedWalletManagementServer) Get(context.Context, *emptypb.Empty) (*WalletGetResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
 }
 

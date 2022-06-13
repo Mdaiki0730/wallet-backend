@@ -20,7 +20,7 @@ service WalletManagement {
       delete : "/v1/wallets"
     };
   };
-  rpc Get(google.protobuf.Empty) returns (WalletBaseResponse) {
+  rpc Get(google.protobuf.Empty) returns (WalletGetResponse) {
     option (google.api.http) = {
       get : "/v1/wallets"
     };

@@ -5,11 +5,12 @@ import (
 )
 
 type Env struct {
-	RestPort      string `required:"true" envconfig:"REST_PORT"`
-	GrpcPort      string `required:"true" envconfig:"GRPC_PORT"`
-	MongoDBUri    string `required:"true" envconfig:"MONGO_DB_URI"`
-	JWTSignature  string `required:"true" envconfig:"JWT_SIGNATURE"`
-	TokenDuration int    `required:"true" envconfig:"TOKEN_DURATION"`
+	RestPort               string `required:"true" envconfig:"REST_PORT"`
+	GrpcPort               string `required:"true" envconfig:"GRPC_PORT"`
+	MongoDBUri             string `required:"true" envconfig:"MONGO_DB_URI"`
+	JWTSignature           string `required:"true" envconfig:"JWT_SIGNATURE"`
+	TokenDuration          int    `required:"true" envconfig:"TOKEN_DURATION"`
+	BlockchainServerDomain string `required:"true" envconfig:"BLOCKCHAIN_SERVER_DOMAIN"`
 }
 
 var Global Env = Env{}

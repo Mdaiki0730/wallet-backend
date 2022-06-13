@@ -2,7 +2,6 @@ package myjwt
 
 import (
 	"errors"
-	"strings"
 	"time"
 
 	"gariwallet/pkg/config"
@@ -23,17 +22,7 @@ func NewJwtManager(signature string, tokenDuration, refreshTokenDuration time.Du
 }
 
 // VerifyAuthorization verifies the access token string
-func (manager *JwtManager) VerifyAuthorization(authorization string) (*jwt.Token, error) {
-	var jwtString string
-	if strings.Contains(authorization, "Bearer ") {
-		jwtStrings := strings.Split(authorization, "Bearer ")
-		if len(jwtStrings) > 1 {
-			jwtString = jwtStrings[1]
-		}
-	} else {
-		jwtString = authorization
-	}
-
+func (manager *JwtManager) VerifyAuthorization(jwtString string) (*jwt.Token, error) {
 	parsedToken, err := jwt.Parse(jwtString, func(token *jwt.Token) (interface{}, error) {
 		// check signing method
 		if _, ok := token.Method.(*jwt.SigningMethodRSA); !ok {

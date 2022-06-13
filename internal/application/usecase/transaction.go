@@ -3,7 +3,6 @@ package usecase
 import (
 	"context"
 	"errors"
-	"fmt"
 
 	"gariwallet/internal/application/command"
 	"gariwallet/internal/application/result"
@@ -34,9 +33,12 @@ func (ta *transactionApp) Create(ctx context.Context, cmd command.TransactionCre
 
 	// create transaction instance
 	transaction := model.NewTransaction(wallet.BlockchainAddress(), cmd.RecipientBlockchainAddress, cmd.Value)
-	fmt.Println(wallet.PrivateKeyStr())
 	signature := transaction.GenerateSignature(wallet.PrivateKey()).String()
-	fmt.Println(signature, transaction)
+	err = ta.blockchainServer.CreateTransaction(
+		ctx, cmd.AccessToken, wallet.BlockchainAddress(), cmd.RecipientBlockchainAddress, wallet.PublicKeyStr(), signature, cmd.Value)
+	if err != nil {
+		return nil, err
+	}
 
 	// data transfer dto
 	result := result.Transaction{wallet.BlockchainAddress(), cmd.RecipientBlockchainAddress, cmd.Value}

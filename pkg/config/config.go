@@ -11,6 +11,7 @@ type Env struct {
 	JWTSignature           string `required:"true" envconfig:"JWT_SIGNATURE"`
 	TokenDuration          int    `required:"true" envconfig:"TOKEN_DURATION"`
 	BlockchainServerDomain string `required:"true" envconfig:"BLOCKCHAIN_SERVER_DOMAIN"`
+	AllowedOrigins         string `required:"true" envconfig:"ALLOWED_ORIGINS"`
 }
 
 var Global Env = Env{}

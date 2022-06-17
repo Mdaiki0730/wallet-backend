@@ -21,6 +21,7 @@ import (
 	"gariwallet/pkg/database"
 	"gariwallet/pkg/myjwt"
 
+	"github.com/gorilla/handlers"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -111,7 +112,12 @@ func RunGateway() error {
 	if err != nil {
 		return err
 	}
-	return http.ListenAndServe(fmt.Sprintf(":%s", config.Global.RestPort), mux)
+	newMux := handlers.CORS(
+		handlers.AllowedMethods([]string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"}),
+		handlers.AllowedOrigins([]string{config.Global.AllowedOrigins}),
+		handlers.AllowedHeaders([]string{"x-foobar-key", "Authorization", "Origin", "X-Requested-With", "Content-Type", "Accept", "X-PINGOTHER", "x-xsrf-token", "x-csrf-token"}),
+	)(mux)
+	return http.ListenAndServe(fmt.Sprintf(":%s", config.Global.RestPort), newMux)
 }
 
 func CustomHTTPError(ctx context.Context, _ *runtime.ServeMux, marshaler runtime.Marshaler, w http.ResponseWriter, _ *http.Request, err error) {

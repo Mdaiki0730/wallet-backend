@@ -12,11 +12,11 @@ import (
   Quote: https://www.oreilly.com/library/view/mastering-bitcoin/9781491902639/ch04.html
 */
 
-func New(pubx, prix []byte) string {
+func New(pubX, pubY []byte) string {
 	// 1. hash by sha256
 	h1 := sha256.New()
-	h1.Write(pubx)
-	h1.Write(prix)
+	h1.Write(pubX)
+	h1.Write(pubY)
 	digest1 := h1.Sum(nil)
 
 	// 2. ripemd160 hash

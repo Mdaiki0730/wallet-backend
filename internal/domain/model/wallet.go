@@ -24,7 +24,7 @@ func NewWallet(idpId string) *Wallet {
 	w.idpId = idpId
 	w.privateKey = privateKey
 	w.publicKey = &w.privateKey.PublicKey
-	w.blockchainAddress = address.New(w.publicKey.X.Bytes(), w.privateKey.X.Bytes())
+	w.blockchainAddress = address.New(w.publicKey.X.Bytes(), w.publicKey.Y.Bytes())
 
 	return w
 }
